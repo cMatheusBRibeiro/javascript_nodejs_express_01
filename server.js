@@ -4,7 +4,8 @@ const PORT = 3000;
 
 const rotas = {
   "/": "Curso de Node.js",
-  "/express": "Curso de Express",
+  "/livros": "Entrei na rota de livros",
+  "/autores": "Entrei na rota de autores",
 };
 
 const server = http.createServer((req, res) => {
