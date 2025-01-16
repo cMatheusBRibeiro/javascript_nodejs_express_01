@@ -4,21 +4,6 @@ import { Book } from "../models/index.js";
 
 await databaseConnect();
 
-const books = [
-  {
-    id: 1,
-    title: "O Senhor dos Anéis",
-  },
-  {
-    id: 2,
-    title: "O Hobbit",
-  },
-];
-
-const findBookIndex = (id) => {
-  return books.findIndex((book) => book.id === id);
-};
-
 const app = express();
 
 // middleware
@@ -30,37 +15,33 @@ app.get("/", (_, res) => {
 
 app.get("/books", async (_, res) => {
   const booksList = await Book.find({});
+
   res.status(200).json(booksList);
 });
 
-app.get("/books/:id", (req, res) => {
-  const index = findBookIndex(parseInt(req.params.id));
+app.get("/books/:id", async (req, res) => {
+  const book = await Book.findById(req.params.id);
 
-  res.status(200).json(books[index]);
+  res.status(200).json(book);
 });
 
-app.post("/books", (req, res) => {
-  books.push(req.body);
+app.post("/books", async (req, res) => {
+  const newBook = new Book(req.body);
 
-  res.status(201).send("Livro cadastrado com sucesso!");
+  await newBook.save();
+
+  res.status(201).json(newBook);
 });
 
-app.put("/books/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const index = findBookIndex(id);
+app.put("/books/:id", async (req, res) => {
+  await Book.findOneAndUpdate({ _id: req.params.id }, req.body);
 
-  books[index] = {
-    id,
-    ...req.body,
-  };
-
-  res.status(200).json(books);
+  const updatedBook = await Book.findById(req.params.id);
+  res.status(200).json(updatedBook);
 });
 
-app.delete("/books/:id", (req, res) => {
-  const index = findBookIndex(parseInt(req.params.id));
-
-  books.splice(index, 1);
+app.delete("/books/:id", async (req, res) => {
+  await Book.deleteOne({ _id: req.params.id });
 
   res.status(204).send();
 });
