@@ -2,15 +2,27 @@ import Book from "../../models/book/book.js";
 
 class BookController {
   static async getAllBooks(_, res) {
-    const booksList = await Book.find({});
+    try {
+      const booksList = await Book.find({});
 
-    res.status(200).json(booksList);
+      res.status(200).json(booksList);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ detail: `Error when get all books: ${error.message}` });
+    }
   }
 
   static async getBookById(req, res) {
-    const book = await Book.findById(req.params.id);
+    try {
+      const book = await Book.findById(req.params.id);
 
-    res.status(200).json(book);
+      res.status(200).json(book);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ detail: `Error when get all books: ${error.message}` });
+    }
   }
 
   static async addBook(req, res) {
@@ -28,16 +40,28 @@ class BookController {
   }
 
   static async updateBook(req, res) {
-    await Book.findOneAndUpdate({ _id: req.params.id }, req.body);
+    try {
+      await Book.findOneAndUpdate({ _id: req.params.id }, req.body);
 
-    const updatedBook = await Book.findById(req.params.id);
-    res.status(200).json(updatedBook);
+      const updatedBook = await Book.findById(req.params.id);
+      res.status(200).json(updatedBook);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ detail: `Error when get all books: ${error.message}` });
+    }
   }
 
   static async deleteBook(req, res) {
-    await Book.deleteOne({ _id: req.params.id });
+    try {
+      await Book.deleteOne({ _id: req.params.id });
 
-    res.status(204).send();
+      res.status(204).send();
+    } catch (error) {
+      res
+        .status(500)
+        .json({ detail: `Error when get all books: ${error.message}` });
+    }
   }
 }
 
