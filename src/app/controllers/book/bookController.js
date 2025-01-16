@@ -44,7 +44,9 @@ class BookController {
       await Book.findByIdAndUpdate(req.params.id, req.body);
 
       const updatedBook = await Book.findById(req.params.id);
-      res.status(200).json(updatedBook);
+      res
+        .status(200)
+        .json({ detail: "Book updated successfully", book: updatedBook });
     } catch (error) {
       res
         .status(500)
