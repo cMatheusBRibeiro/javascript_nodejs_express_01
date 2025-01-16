@@ -1,7 +1,7 @@
 import Book from "../../models/book/book.js";
 
 class BookController {
-  static async getAllBooks(req, res) {
+  static async getAllBooks(_, res) {
     const booksList = await Book.find({});
 
     res.status(200).json(booksList);
@@ -14,11 +14,17 @@ class BookController {
   }
 
   static async addBook(req, res) {
-    const newBook = new Book(req.body);
+    try {
+      const newBook = await Book.create(req.body);
 
-    await newBook.save();
-
-    res.status(201).json(newBook);
+      res
+        .status(201)
+        .json({ detail: "Book created successfully!", book: newBook });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ detail: `Error when created a new book: ${error.message}` });
+    }
   }
 
   static async updateBook(req, res) {
