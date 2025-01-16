@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 
 const databaseConnect = async () => {
-  mongoose.connect(
-    `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@cluster0.6ljub.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-  );
+  mongoose.connect(process.env.DB_CONNECTION_STRING);
 
   mongoose.connection.on("error", (error) => {
     console.error("Database Connection Error", error);

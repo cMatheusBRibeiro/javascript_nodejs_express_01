@@ -1,7 +1,8 @@
 import express from "express";
 import { databaseConnect } from "../config/db/index.js";
+import { Book } from "../models/index.js";
 
-const databaseConnection = await databaseConnect();
+await databaseConnect();
 
 const books = [
   {
@@ -23,12 +24,13 @@ const app = express();
 // middleware
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.status(200).send("Hello World");
 });
 
-app.get("/books", (req, res) => {
-  res.status(200).json(books);
+app.get("/books", async (_, res) => {
+  const booksList = await Book.find({});
+  res.status(200).json(booksList);
 });
 
 app.get("/books/:id", (req, res) => {
