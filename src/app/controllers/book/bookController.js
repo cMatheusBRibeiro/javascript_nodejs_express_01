@@ -41,7 +41,7 @@ class BookController {
 
   static async updateBook(req, res) {
     try {
-      await Book.findOneAndUpdate({ _id: req.params.id }, req.body);
+      await Book.findByIdAndUpdate(req.params.id, req.body);
 
       const updatedBook = await Book.findById(req.params.id);
       res.status(200).json(updatedBook);
@@ -54,7 +54,7 @@ class BookController {
 
   static async deleteBook(req, res) {
     try {
-      await Book.deleteOne({ _id: req.params.id });
+      await Book.findByIdAndDelete(req.params.id);
 
       res.status(204).send();
     } catch (error) {
