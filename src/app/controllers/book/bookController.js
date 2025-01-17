@@ -21,7 +21,7 @@ class BookController {
     } catch (error) {
       res
         .status(500)
-        .json({ detail: `Error when get all books: ${error.message}` });
+        .json({ detail: `Error when get book by id: ${error.message}` });
     }
   }
 
@@ -50,7 +50,7 @@ class BookController {
     } catch (error) {
       res
         .status(500)
-        .json({ detail: `Error when get all books: ${error.message}` });
+        .json({ detail: `Error when update author: ${error.message}` });
     }
   }
 
@@ -62,7 +62,7 @@ class BookController {
     } catch (error) {
       res
         .status(500)
-        .json({ detail: `Error when get all books: ${error.message}` });
+        .json({ detail: `Error when delete book: ${error.message}` });
     }
   }
 }
