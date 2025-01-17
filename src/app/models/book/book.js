@@ -8,7 +8,11 @@ const bookSchema = mongoose.Schema(
     publisher: { type: String },
     price: { type: Number },
     pages: { type: Number },
-    author: authorSchema,
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "author",
+      required: true,
+    },
   },
   { versionKey: false }
 );

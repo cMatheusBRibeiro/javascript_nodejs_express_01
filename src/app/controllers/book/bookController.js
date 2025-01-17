@@ -12,7 +12,7 @@ class BookController {
     }
 
     try {
-      const booksList = await Book.find(filter);
+      const booksList = await Book.find(filter).populate("author").exec();
 
       res.status(200).json(booksList);
     } catch (error) {
@@ -24,7 +24,7 @@ class BookController {
 
   static async getBookById(req, res) {
     try {
-      const book = await Book.findById(req.params.id);
+      const book = await Book.findById(req.params.id).populate("author").exec();
 
       res.status(200).json(book);
     } catch (error) {
@@ -35,18 +35,8 @@ class BookController {
   }
 
   static async addBook(req, res) {
-    const newBook = req.body;
-
     try {
-      const author = await Author.findById(newBook.author);
-      const completedBook = {
-        ...newBook,
-        author: {
-          ...author._doc,
-        },
-      };
-
-      const createdBook = await Book.create(completedBook);
+      const createdBook = await Book.create(req.body);
 
       res
         .status(201)
