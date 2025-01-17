@@ -1,9 +1,18 @@
+import Author from "../../models/author/author.js";
 import Book from "../../models/book/book.js";
 
 class BookController {
-  static async getAllBooks(_, res) {
+  static async getAllBooks(req, res) {
+    const publisher = req.query.publisher;
+
+    const filter = {};
+
+    if (publisher) {
+      filter["publisher"] = new RegExp(publisher, "i");
+    }
+
     try {
-      const booksList = await Book.find({});
+      const booksList = await Book.find(filter);
 
       res.status(200).json(booksList);
     } catch (error) {
@@ -26,12 +35,22 @@ class BookController {
   }
 
   static async addBook(req, res) {
+    const newBook = req.body;
+
     try {
-      const newBook = await Book.create(req.body);
+      const author = await Author.findById(newBook.author);
+      const completedBook = {
+        ...newBook,
+        author: {
+          ...author._doc,
+        },
+      };
+
+      const createdBook = await Book.create(completedBook);
 
       res
         .status(201)
-        .json({ detail: "Book created successfully!", book: newBook });
+        .json({ detail: "Book created successfully!", book: createdBook });
     } catch (error) {
       res
         .status(500)
